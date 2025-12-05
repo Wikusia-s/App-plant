@@ -1,0 +1,88 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: plant-app-db
+    env: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile.db
+    disk:
+      name: plant-db-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
+
+  # Python FastAPI RAG Service
+  - type: web
+    name: plant-app-rag
+    env: python
+    plan: free
+    region: frankfurt
+    buildCommand: cd backend_app && pip install -r requirements.txt
+    startCommand: cd backend_app && uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: plant-app-db
+          property: host
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: plant_chatbot
+      - key: DB_USER
+        value: plant_user
+      - key: DB_PASSWORD
+        sync: false
+
+  # Node.js Express Backend
+  - type: web
+    name: plant-app-backend
+    env: node
+    plan: free
+    region: frankfurt
+    buildCommand: cd backend_app && npm install
+    startCommand: cd backend_app && npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        sync: false
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: plant-app-db
+          property: host
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: plant_chatbot
+      - key: DB_USER
+        value: plant_user
+      - key: DB_PASSWORD
+        sync: false
+      - key: PYTHON_RAG_URL
+        fromService:
+          type: web
+          name: plant-app-rag
+          property: host
+
+  # React Frontend
+  - type: web
+    name: plant-app-frontend
+    env: static
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: plant-app-backend
+          property: host
