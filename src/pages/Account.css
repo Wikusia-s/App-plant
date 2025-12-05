@@ -1,0 +1,129 @@
+.account-container {
+    max-width: 520px;
+    margin: 48px auto;
+    padding: 24px;
+    background: var(--panel);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.account-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.account-avatar img,
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 40px;
+    font-weight: bold;
+    background: #eaf4ea;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.account-avatar img:hover,
+.avatar-placeholder:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.4);
+}
+
+.account-container h2 {
+    font-size: 28px;
+    color: var(--ink);
+    margin: 0;
+}
+
+.account-fields {
+    margin-top: 20px;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.account-field label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--muted);
+}
+
+.account-field span {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f6fbf6;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.account-field input {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.edit-btn {
+    margin-top: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    background: var(--panel);
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.edit-btn:hover {
+    transform: scale(1.05);
+}
+
+.account-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1 1 30%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}

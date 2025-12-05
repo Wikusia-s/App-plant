@@ -1,0 +1,2 @@
+- [x] Move the edit button (pencil) from left upper corner to right down corner in Collection.css
+- [x] Change the edit button from pencil emoji to "edit" text and remove green background in Collection.tsx and Collection.css

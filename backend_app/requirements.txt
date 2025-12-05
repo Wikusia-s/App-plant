@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+sentence-transformers
+numpy
+google-generativeai
+langchain-text-splitters
+pydantic
+psycopg2-binary
