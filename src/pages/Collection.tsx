@@ -182,7 +182,7 @@ const Collection: React.FC = () => {
                                 className="edit-btn"
                                 onClick={() => handleEditPlant(plant)}
                             >
-                                ?
+                                ✎ Edit
                             </button>
                             <button
                                 className="delete-btn"

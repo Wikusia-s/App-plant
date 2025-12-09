@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import Collection from './pages/Collection';
+import Recommendations from './pages/Recommendations';
 import Account from './pages/Account';
 import Chat from './pages/Chat';
 import { authService } from './services/authService';
@@ -114,6 +115,7 @@ function App() {
           <Route path="/" element={<HomePage username={user?.username || ''} />} />
           <Route path="/chat" element={<Chat user={user} />} />
           <Route path="/collection" element={<Collection />} />
+          <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/account" element={<Account user={user} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

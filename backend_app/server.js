@@ -5,8 +5,10 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const collectionRoutes = require('./routes/collectionRoutes');
+const recommendationRoutes = require('./routes/recommendationRoutes');
 const { createTables } = require('./config/initDb');
 const { startPythonRAG, initializeEmbeddings } = require('./controllers/ragController');
+const { startRecommenderService, checkRecommenderHealth } = require('./controllers/recommenderController');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/collection', collectionRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
@@ -47,11 +50,15 @@ const startServer = async () => {
     console.log('🐍 Starting Python RAG service...');
     await startPythonRAG();
 
+    // console.log('🧭 Starting recommender service...');
+    // await startRecommenderService(); // wyłączone — uruchamiamy ręcznie w osobnym oknie
+
     // 3. Start Express server first
     app.listen(PORT, () => {
       console.log(`\n✅ Backend ready!`);
       console.log(`📍 Node.js API: http://localhost:${PORT}`);
       console.log(`🐍 Python RAG: http://localhost:8000`);
+      console.log(`🧭 Recommender: http://localhost:${process.env.RECOMMENDER_PORT || 8765} (manual)`);
       console.log(`🌐 Frontend: http://localhost:5173\n`);
     });
 
@@ -59,6 +66,12 @@ const startServer = async () => {
     console.log('🧠 Checking embeddings...');
     // Wait a bit longer before initializing
     setTimeout(() => initializeEmbeddings(), 5000);
+
+    // Optional: log recommender health after startup
+    setTimeout(async () => {
+      const ok = await checkRecommenderHealth();
+      console.log(ok ? '✓ Recommender healthy (manual)' : '⚠️ Recommender healthcheck failed — upewnij się, że działa ręcznie na porcie 8765');
+    }, 4000);
 
   } catch (error) {
     console.error('❌ Failed to start server:', error);

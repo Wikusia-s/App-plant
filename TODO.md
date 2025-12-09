@@ -1,2 +1,7 @@
 - [x] Move the edit button (pencil) from left upper corner to right down corner in Collection.css
 - [x] Change the edit button from pencil emoji to "edit" text and remove green background in Collection.tsx and Collection.css
+- [ ] Podpiąć serwis FastAPI z rekomendacjami (uruchamianie, env, port 8001) i healthcheck w backendzie Node.
+- [ ] Dodać w backendzie Node trasę proxy `/api/recommendations/*` (similar/constraints/hybrid) pobierającą rośliny użytkownika jako `seed_plants` i przekazującą filtry do FastAPI.
+- [ ] Stworzyć w frontendzie `src/services/recommendationService.ts` wywołujący nowe endpointy z JWT.
+- [ ] Zaimplementować stronę `Recommendations` z formularzem (light/water/humidity/pets_safe/difficulty/top_k, przełącznik trybu) i listą wyników; dodać routing w `App.tsx`.
+- [ ] Obsłużyć UX: brak roślin w kolekcji (CTA dodania), loading/error states, możliwość zmiany `top_k`.
