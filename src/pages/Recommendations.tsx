@@ -224,7 +224,6 @@ const Recommendations: React.FC = () => {
               {recommendations.map((rec, idx) => (
                 <div key={idx} className="results-item">
                   <div className="results-item-name">{rec.plant_name}</div>
-                  <div className="results-item-score">score: {rec.score.toFixed(3)}</div>
                 </div>
               ))}
             </div>
