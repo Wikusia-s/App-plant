@@ -62,7 +62,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, onSwitchToLogin }) => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Register for Plant Chatbot</h2>
+        <h2>Register to Plantify</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>

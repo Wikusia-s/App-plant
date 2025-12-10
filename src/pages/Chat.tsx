@@ -40,6 +40,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   const [loading, setLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [deleteModal, setDeleteModal] = useState<{ show: boolean; convId: number | null }>({ show: false, convId: null });
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -160,8 +161,6 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   }
 
   const handleDeleteConversation = async (convId: number) => {
-    if (!window.confirm('Delete this conversation?')) return;
-
     try {
       await chatService.deleteConversation(convId);
       setConversations(conversations.filter(c => c.id !== convId));
@@ -170,6 +169,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
         setCurrentConversationId(null);
         setMessages([]);
       }
+      setDeleteModal({ show: false, convId: null });
     } catch (error) {
       console.error('Failed to delete conversation:', error);
     }
@@ -212,7 +212,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeleteConversation(conv.id);
+                    setDeleteModal({ show: true, convId: conv.id });
                   }}
                   className="delete-conv-btn"
                 >
@@ -291,6 +291,30 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.show && (
+        <div className="modal-overlay" onClick={() => setDeleteModal({ show: false, convId: null })}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Conversation?</h3>
+            <p>Are you sure you want to delete this conversation? This action cannot be undone.</p>
+            <div className="modal-actions">
+              <button
+                className="btn-cancel"
+                onClick={() => setDeleteModal({ show: false, convId: null })}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn-delete"
+                onClick={() => deleteModal.convId && handleDeleteConversation(deleteModal.convId)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

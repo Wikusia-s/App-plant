@@ -732,103 +732,157 @@ body::before {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 50%, #e0f2f1 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><g fill="%232e7d32"><circle cx="30" cy="30" r="3"/><circle cx="120" cy="40" r="2.5"/><circle cx="80" cy="120" r="2.5"/><path d="M150 130c6 0 10 4 10 10s-7 13-10 18c-3-5-10-12-10-18s4-10 10-10z"/><path d="M44 150c5-7 15-7 20 0 1 2 1 4 0 6-5 7-15 7-20 0-1-2-1-4 0-6z"/></g></svg>');
+  background-size: 180px 180px;
+  pointer-events: none;
 }
 
 .auth-card {
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(46, 125, 50, 0.15);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  border: 1px solid #e8f5e9;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.4s ease;
+}
+
+.auth-card::before {
+  content: "🌿";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 48px;
+  background: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.2);
+  border: 3px solid #e8f5e9;
 }
 
 .auth-card h2 {
-  margin-bottom: 1.5rem;
-  color: #2e7d32;
+  margin: 2rem 0 1.5rem 0;
+  color: var(--accent);
   text-align: center;
+  font-size: 26px;
+  font-weight: 800;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+  padding: 12px 16px;
+  border: 2px solid #e0f2f1;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  background: #f9fdfb;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #2e7d32;
+  border-color: var(--accent-2);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.08);
 }
 
 .form-group input:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .error-message {
-  background-color: #ffebee;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
   color: #c62828;
-  padding: 0.75rem;
-  border-radius: 5px;
+  padding: 12px 16px;
+  border-radius: 10px;
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 14px;
+  border: 1px solid #ef9a9a;
+  font-weight: 500;
 }
 
 .auth-button {
   width: 100%;
-  padding: 0.75rem;
-  background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+  padding: 14px;
+  background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+  margin-top: 0.5rem;
 }
 
 .auth-button:hover:not(:disabled) {
   transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(46, 125, 50, 0.4);
+}
+
+.auth-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .auth-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .auth-switch {
   text-align: center;
   margin-top: 1.5rem;
-  color: #666;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .link-button {
   background: none;
   border: none;
-  color: #2e7d32;
+  color: var(--accent);
   cursor: pointer;
-  font-weight: 600;
-  text-decoration: underline;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .link-button:hover {
-  color: #66bb6a;
+  color: var(--accent-2);
+  text-decoration: underline;
 }
 
 /* User info in header */
@@ -1325,4 +1379,85 @@ body::before {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.4;
+}
+
+/* Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.confirm-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.25s ease;
+}
+
+.confirm-modal h3 {
+  margin: 0 0 12px 0;
+  color: var(--ink);
+  font-size: 20px;
+}
+
+.confirm-modal p {
+  margin: 0 0 20px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-delete {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background: #f0f0f0;
+  color: var(--ink);
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+.btn-delete {
+  background: #d32f2f;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #b71c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }

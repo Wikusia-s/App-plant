@@ -8,6 +8,9 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': 'http://localhost:8000'
+    },
+    watch: {
+      ignored: ['**/node_modules/**', '**/.venv/**', '**/venv/**', '**/__pycache__/**']
     }
   },
   preview: {
