@@ -1,11 +1,59 @@
 .account-container {
-    max-width: 520px;
-    margin: 48px auto;
-    padding: 24px;
-    background: var(--panel);
+    position: relative;
+    min-height: 100vh;
+    padding: 48px 24px;
+    overflow: hidden;
+    background: #f7fbf7;
+}
+
+/* Animated background with plant images */
+.account-bg-animation {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.plant-square {
+    position: absolute;
+    width: 150px;
+    height: 150px;
     border-radius: 12px;
-    box-shadow: var(--shadow);
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    filter: blur(2px) brightness(1.1);
+    animation: fadeInOut 8s ease-in-out infinite;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    50% {
+        opacity: 0.25;
+        transform: scale(1);
+    }
+}
+
+/* Content wrapper with backdrop */
+.account-content {
+    position: relative;
+    z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(17, 29, 17, 0.12);
     text-align: center;
+    border: 1px solid rgba(219, 231, 217, 0.8);
 }
 
 .account-header {
