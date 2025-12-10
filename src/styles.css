@@ -1486,8 +1486,6 @@ body {
   padding: 16px;
   max-width: 1400px;
   margin: 0 auto;
-  height: calc(100vh - 80px);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
