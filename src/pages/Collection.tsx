@@ -200,7 +200,7 @@ const Collection: React.FC = () => {
                             {plant.name}
                         </div>
                         <div className="plant-species">
-                            ({plant.species})
+                            {plant.species ? `(${plant.species})` : ''}
                         </div>
                     </div>
                 ))}
