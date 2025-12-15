@@ -88,10 +88,14 @@ const createTables = async () => {
           user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
           name VARCHAR(255) NOT NULL,            -- nazwa nadana przez użytkownika
           image_url TEXT NOT NULL,               -- URL lub ścieżka do zdjęcia
+          species VARCHAR(255),                  -- gatunek podawany przez użytkownika
           notes TEXT,  
           embedding vector(384),                      -- przyszły embedding do systemu rekomendacji
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+        -- Ensure new column exists when upgrading
+        ALTER TABLE plants ADD COLUMN IF NOT EXISTS species VARCHAR(255);
 
 
       CREATE INDEX IF NOT EXISTS idx_plants_user_id ON plants(user_id);

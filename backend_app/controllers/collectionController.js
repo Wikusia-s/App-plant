@@ -30,7 +30,7 @@ const upload = multer({
 // Dodawanie rośliny
 const addPlant = async (req, res) => {
     const userId = req.user.id;
-    const { name, species } = req.body;
+    const { name, species, notes } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!name || !imageUrl || !species) {
@@ -39,8 +39,8 @@ const addPlant = async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO plants (user_id, name, image_url, species) VALUES ($1, $2, $3, $4) RETURNING *',
-            [userId, name, imageUrl, species]
+            'INSERT INTO plants (user_id, name, image_url, species, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [userId, name, imageUrl, species, notes || null]
         );
 
         res.status(201).json({ plant: result.rows[0] });

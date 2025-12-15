@@ -10,15 +10,16 @@ let pythonProcess = null;
 const startPythonRAG = () => {
   return new Promise((resolve, reject) => {
     const backendDir = path.join(__dirname, '..');
-    
+
     // Try multiple Python paths
     const possiblePythonPaths = [
+      path.join(backendDir, '..', '.venv', 'Scripts', 'python.exe'),   // ← właściwy!
       path.join(backendDir, 'venv', 'Scripts', 'python.exe'),
       path.join(backendDir, '.venv', 'Scripts', 'python.exe'),
       'python',
       'python3'
     ];
-    
+
     let pythonCmd = 'python';
     for (const pythonPath of possiblePythonPaths) {
       if (pythonPath.includes('venv') && fs.existsSync(pythonPath)) {
@@ -26,16 +27,16 @@ const startPythonRAG = () => {
         break;
       }
     }
-    
+
     console.log(`Using Python: ${pythonCmd}`);
-    
+
     // Use cmd.exe on Windows to properly execute commands
     const isWindows = process.platform === 'win32';
     const command = isWindows ? 'cmd.exe' : pythonCmd;
-    const args = isWindows 
+    const args = isWindows
       ? ['/c', pythonCmd, '-m', 'uvicorn', 'app:app', '--port', '8000', '--host', '127.0.0.1']
       : ['-m', 'uvicorn', 'app:app', '--port', '8000', '--host', '127.0.0.1'];
-    
+
     pythonProcess = spawn(command, args, {
       cwd: backendDir,
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -49,9 +50,9 @@ const startPythonRAG = () => {
       const output = data.toString();
       outputBuffer += output;
       console.log(`[Python RAG] ${output.trim()}`);
-      
-      if ((output.includes('Application startup complete') || 
-           output.includes('Uvicorn running')) && !startupComplete) {
+
+      if ((output.includes('Application startup complete') ||
+        output.includes('Uvicorn running')) && !startupComplete) {
         startupComplete = true;
         console.log('✓ Python RAG service started on port 8000');
         resolve();
@@ -62,14 +63,14 @@ const startPythonRAG = () => {
       const error = data.toString();
       // stderr is actually used for INFO logs by uvicorn
       console.log(`[Python RAG] ${error.trim()}`);
-      
-      if ((error.includes('Application startup complete') || 
-           error.includes('Uvicorn running')) && !startupComplete) {
+
+      if ((error.includes('Application startup complete') ||
+        error.includes('Uvicorn running')) && !startupComplete) {
         startupComplete = true;
         console.log('✓ Python RAG service started on port 8000');
         resolve();
       }
-      
+
       if (error.includes('No module named') || error.includes('ModuleNotFoundError')) {
         console.error('❌ Missing Python dependencies!');
       }
@@ -104,23 +105,23 @@ const initializeEmbeddings = async () => {
   try {
     const countResult = await pool.query('SELECT COUNT(*) FROM plant_documents');
     const count = parseInt(countResult.rows[0].count);
-    
+
     if (count > 0) {
       console.log(`✓ Found ${count} existing embeddings in database`);
       return;
     }
 
     console.log('⏳ Initializing embeddings from plant_articles.json...');
-    
+
     // Retry logic for initialization
     let attempts = 0;
     const maxAttempts = 5;
     const retryDelay = 3000; // 3 seconds between retries
-    
+
     while (attempts < maxAttempts) {
       try {
         await new Promise(resolve => setTimeout(resolve, retryDelay * (attempts + 1)));
-        
+
         const response = await fetch('http://localhost:8000/api/initialize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
@@ -159,7 +160,7 @@ const chat = async (req, res) => {
       'SELECT message, response FROM chat_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT 5',
       [userId]
     );
-    
+
     const history = historyResult.rows.reverse().map(row => ({
       user: row.message,
       assistant: row.response
@@ -171,7 +172,7 @@ const chat = async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         message,
         k: 5,
         history
@@ -196,9 +197,9 @@ const chat = async (req, res) => {
     });
   } catch (error) {
     console.error('Chat error:', error);
-    res.status(500).json({ 
-      error: 'Failed to get response', 
-      details: error.message 
+    res.status(500).json({
+      error: 'Failed to get response',
+      details: error.message
     });
   }
 };
@@ -218,9 +219,9 @@ const getHistory = async (req, res) => {
   }
 };
 
-module.exports = { 
-  startPythonRAG, 
+module.exports = {
+  startPythonRAG,
   initializeEmbeddings,
-  chat, 
-  getHistory 
+  chat,
+  getHistory
 };
