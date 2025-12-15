@@ -99,23 +99,53 @@ const Recommendations: React.FC = () => {
     }
   };
 
-  const renderSlider = (label: string, value: number, onChange: (v: number) => void) => {
-    const levelLabel = getLevelLabel(value);
+  const renderRadioGroup = (label: string, value: number, onChange: (v: number) => void, options: Array<{ value: number; label: string }>) => {
     return (
-      <label className="form-row">
-        <div className="slider-header">
-          <span>{label}</span>
-          <span className="slider-value">{levelLabel}</span>
+      <div className="form-row">
+        <span style={{ fontWeight: 600, marginBottom: '12px', display: 'block', fontSize: '14px' }}>{label}</span>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {options.map((opt) => (
+            <label
+              key={opt.value}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                border: value === opt.value ? '2px solid #2e7d32' : '2px solid #dbe7d9',
+                background: value === opt.value ? '#e8f5e9' : '#f9fbf9',
+                transition: 'all 0.2s ease',
+                fontWeight: value === opt.value ? 600 : 500,
+                color: value === opt.value ? '#2e7d32' : '#1f2d1f',
+              }}
+              onMouseEnter={(e) => {
+                if (value !== opt.value) {
+                  e.currentTarget.style.borderColor = '#94c794';
+                  e.currentTarget.style.background = '#f5faf5';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (value !== opt.value) {
+                  e.currentTarget.style.borderColor = '#dbe7d9';
+                  e.currentTarget.style.background = '#f9fbf9';
+                }
+              }}
+            >
+              <input
+                type="radio"
+                name={label}
+                value={opt.value}
+                checked={value === opt.value}
+                onChange={(e) => onChange(Number(e.target.value))}
+                style={{ display: 'none' }}
+              />
+              <span>{opt.label}</span>
+            </label>
+          ))}
         </div>
-        <input
-          type="range"
-          min="1"
-          max="3"
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className="slider-input"
-        />
-      </label>
+      </div>
     );
   };
 
@@ -151,24 +181,30 @@ const Recommendations: React.FC = () => {
             Refine by care preferences to tailor your picks.
           </p>
           <div className="form-grid">
-            {renderSlider('Light ☀️', lightLevel, setLightLevel)}
-            {renderSlider('Water 💧', waterLevel, setWaterLevel)}
-            {renderSlider('Humidity 🌿', humidityLevel, setHumidityLevel)}
-            {renderSlider('Difficulty 🌱', difficultyLevel, setDifficultyLevel)}
-            <label className="form-row">
-              <div className="slider-header">
-                <span>Pet safe? 🐾</span>
-                <span className="slider-value">{getPetsSafeLabel(petsSafe)}</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="2"
-                value={petsSafe}
-                onChange={(e) => setPetsSafe(Number(e.target.value))}
-                className="slider-input slider-input--binary"
-              />
-            </label>
+            {renderRadioGroup('Light ☀️', lightLevel, setLightLevel, [
+              { value: 1, label: 'Low' },
+              { value: 2, label: 'Medium' },
+              { value: 3, label: 'High' },
+            ])}
+            {renderRadioGroup('Water 💧', waterLevel, setWaterLevel, [
+              { value: 1, label: 'Low' },
+              { value: 2, label: 'Medium' },
+              { value: 3, label: 'High' },
+            ])}
+            {renderRadioGroup('Humidity 🌿', humidityLevel, setHumidityLevel, [
+              { value: 1, label: 'Low' },
+              { value: 2, label: 'Medium' },
+              { value: 3, label: 'High' },
+            ])}
+            {renderRadioGroup('Difficulty 🌱', difficultyLevel, setDifficultyLevel, [
+              { value: 1, label: 'Low' },
+              { value: 2, label: 'Medium' },
+              { value: 3, label: 'High' },
+            ])}
+            {renderRadioGroup('Pet safe? 🐾', petsSafe, setPetsSafe, [
+              { value: 1, label: 'No' },
+              { value: 2, label: 'Yes' },
+            ])}
             <label className="form-row">
               <span>Top K 🌸</span>
               <input
