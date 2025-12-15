@@ -34,7 +34,7 @@ def get_db_connection():
     )
 
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-gemini_model = genai.GenerativeModel("gemini-2.0-flash")
+gemini_model = genai.GenerativeModel("gemini-2.5-flash-lite")
 
 # ------------------ FastAPI models ------------------
 class Turn(BaseModel):
@@ -84,15 +84,21 @@ def initialize_embeddings():
         cursor = conn.cursor()
         cursor.execute("DELETE FROM plant_documents")
         conn.commit()
+        
+        # Load and store new articles
+        count = load_and_store_articles()
+        
+        # Get total count of stored chunks
+        cursor.execute("SELECT COUNT(*) as chunk_count FROM plant_documents")
+        result = cursor.fetchone()
+        total_chunks = result[0] if result else 0
+        
         cursor.close()
         conn.close()
         
-        # Load and store new articles
-        load_and_store_articles()
-        
-        return {"status": "success", "message": "Articles loaded successfully"}
+        return {"status": "success", "message": "Articles loaded successfully", "count": total_chunks}
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        return {"status": "error", "message": str(e), "count": 0}
 
 def build_prompt(query: str, context_chunks: List[dict], chat_history: List[dict]):
     context = "\n\n".join(
