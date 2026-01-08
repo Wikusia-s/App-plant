@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Collection.css";
 import { collectionService, Plant } from "../services/collectionService";
 
 const Collection: React.FC = () => {
+    const navigate = useNavigate();
     const [plants, setPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -19,6 +21,10 @@ const Collection: React.FC = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [plantToEdit, setPlantToEdit] = useState<Plant | null>(null);
     const [editPlantName, setEditPlantName] = useState("");
+
+    // New: actions modal opened by clicking plant image
+    const [showActionsModal, setShowActionsModal] = useState(false);
+    const [plantForActions, setPlantForActions] = useState<Plant | null>(null);
 
     useEffect(() => {
         fetchPlants();
@@ -138,6 +144,29 @@ const Collection: React.FC = () => {
         setEditPlantName("");
     };
 
+    const handleImageClick = (plant: Plant) => {
+        setPlantForActions(plant);
+        setShowActionsModal(true);
+    };
+
+    const handleActionEditPlant = () => {
+        if (!plantForActions) return;
+        setShowActionsModal(false);
+        setPlantToEdit(plantForActions);
+        setEditPlantName(plantForActions.name);
+        setShowEditModal(true);
+    };
+
+    const handleActionChat = () => {
+        setShowActionsModal(false);
+        navigate('/chat');
+    };
+
+    const handleActionIdentify = () => {
+        setShowActionsModal(false);
+        navigate('/identify', { state: { plant: plantForActions } });
+    };
+
     if (loading) {
         return (
             <div className="plant-container">
@@ -177,24 +206,19 @@ const Collection: React.FC = () => {
 
                 {plants.map((plant) => (
                     <div key={plant.id} className="plant-card">
-                        <div className="plant-actions">
-                            <button
-                                className="edit-btn"
-                                onClick={() => handleEditPlant(plant)}
-                            >
-                                ✎ Edit
-                            </button>
-                            <button
-                                className="delete-btn"
-                                onClick={() => handleDeletePlant(plant)}
-                            >
-                                ✕
-                            </button>
-                        </div>
+                        <button
+                            className="delete-btn"
+                            onClick={() => handleDeletePlant(plant)}
+                            aria-label={`Delete ${plant.name}`}
+                            title="Delete"
+                        >
+                            ✕
+                        </button>
                         <img
                             src={`http://localhost:5000${plant.image_url}`}
                             alt={plant.name}
                             className="plant-image"
+                            onClick={() => handleImageClick(plant)}
                         />
                         <div className="plant-name">
                             {plant.name}
@@ -202,6 +226,7 @@ const Collection: React.FC = () => {
                         <div className="plant-species">
                             {plant.species ? `(${plant.species})` : ''}
                         </div>
+                        {/* Edit button removed; use image click actions modal instead */}
                     </div>
                 ))}
             </div>
@@ -264,6 +289,28 @@ const Collection: React.FC = () => {
                         <div className="modal-buttons">
                             <button onClick={handleEditConfirm}>Update Plant</button>
                             <button onClick={handleEditCancel}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Actions Modal (on image click) */}
+            {showActionsModal && plantForActions && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <button
+                            className="modal-close"
+                            aria-label="Close"
+                            onClick={() => setShowActionsModal(false)}
+                        >
+                            ✕
+                        </button>
+                        <h2>Choose an action</h2>
+                        <p style={{ marginTop: 0, color: 'var(--muted)' }}>{plantForActions.name}{plantForActions.species ? ` (${plantForActions.species})` : ''}</p>
+                        <div className="modal-buttons">
+                            <button onClick={handleActionEditPlant}>✎ Edit Plant</button>
+                            <button onClick={handleActionChat}>💬 Chat with Assistant</button>
+                            <button onClick={handleActionIdentify}>🔍 Identify Plant</button>
                         </div>
                     </div>
                 </div>

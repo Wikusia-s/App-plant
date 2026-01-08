@@ -94,8 +94,9 @@ const createTables = async () => {
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
-        -- Ensure new column exists when upgrading
+        -- Ensure new columns exist when upgrading
         ALTER TABLE plants ADD COLUMN IF NOT EXISTS species VARCHAR(255);
+        ALTER TABLE plants ADD COLUMN IF NOT EXISTS notes TEXT;
 
 
       CREATE INDEX IF NOT EXISTS idx_plants_user_id ON plants(user_id);
