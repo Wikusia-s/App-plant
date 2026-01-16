@@ -186,9 +186,17 @@ const chat = async (req, res) => {
     const ragData = await ragResponse.json();
 
     // Save to chat history with sources
+    // old version 
+    // await pool.query(
+    //   'INSERT INTO chat_history (user_id, message, response, sources) VALUES ($1, $2, $3, $4)',
+    //   [userId, message, ragData.answer, JSON.stringify(ragData.sources)]
+    // );
+
+    // new 
+    
     await pool.query(
-      'INSERT INTO chat_history (user_id, message, response, sources) VALUES ($1, $2, $3, $4)',
-      [userId, message, ragData.answer, JSON.stringify(ragData.sources)]
+      'INSERT INTO messages (conversation_id, message, response, sources) VALUES ($1, $2, $3, $4)',
+      [conversationId, message, ragData.answer, JSON.stringify(ragData.sources)]
     );
 
     res.json({

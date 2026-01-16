@@ -47,6 +47,27 @@
     color: var(--accent-2);
 }
 
+/* Dark mode support for Collection */
+[data-theme="dark"] .plant-container {
+    background: var(--bg) !important;
+}
+
+[data-theme="dark"] .add-card,
+[data-theme="dark"] .plant-card {
+    background: var(--panel) !important;
+    border: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .add-card {
+    border: 1px dashed var(--accent) !important;
+}
+
+[data-theme="dark"] .plant-name,
+[data-theme="dark"] .plant-species {
+    color: var(--ink) !important;
+}
+
 .add-card,
 .plant-card {
     flex: 0 0 150px;
@@ -154,6 +175,16 @@
 
 .modal-buttons button:hover {
     transform: scale(1.05);
+}
+
+.modal-buttons button.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+.modal-buttons button.delete-btn:hover {
+    background: #c82333;
 }
 
 /* Top-right green close X for modals on Collection page */

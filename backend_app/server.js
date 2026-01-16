@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const collectionRoutes = require('./routes/collectionRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
+const careRoutes = require('./routes/careRoutes');
 const { createTables } = require('./config/initDb');
 const { startPythonRAG, initializeEmbeddings } = require('./controllers/ragController');
 const { startRecommenderService, checkRecommenderHealth } = require('./controllers/recommenderController');
@@ -22,10 +23,10 @@ const allowedOrigins = [
 
 // Middleware
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
-    
+
     if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
       callback(null, true);
     } else {
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/collection', collectionRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/care', careRoutes);
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));

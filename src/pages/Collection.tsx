@@ -265,7 +265,7 @@ const Collection: React.FC = () => {
                         <div className="modal-buttons">
                             <button
                                 onClick={handleDeleteConfirm}
-                                style={{ background: '#dc3545', color: 'white', border: 'none' }}
+                                className="delete-btn"
                             >
                                 Delete Plant
                             </button>

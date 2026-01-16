@@ -7,6 +7,7 @@ import Collection from './pages/Collection';
 import Recommendations from './pages/Recommendations';
 import Account from './pages/Account';
 import Chat from './pages/Chat';
+import Settings from './pages/Settings';
 import { authService } from './services/authService';
 import './styles.css';
 
@@ -17,6 +18,8 @@ interface User {
 }
 
 function App() {
+  const plantIcon = '🌿';
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
@@ -67,7 +70,7 @@ function App() {
           >
             ☰
           </button>
-          <div className="brand__logo">🌿</div>
+          <div className="brand__logo" aria-hidden="true">{plantIcon}</div>
           <span>Plantify</span>
         </div>
 
@@ -103,7 +106,8 @@ function App() {
         {/* Settings na dole */}
         <div className="sidebar-bottom">
           <Link to="/settings" className="sidebar-link">
-            🌿 Settings
+            <span aria-hidden="true">{plantIcon}</span>
+            <span style={{ marginLeft: 8 }}>Settings</span>
           </Link>
         </div>
       </div>
@@ -117,6 +121,7 @@ function App() {
           <Route path="/collection" element={<Collection />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/account" element={<Account user={user} />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

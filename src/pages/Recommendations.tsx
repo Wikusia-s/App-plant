@@ -100,6 +100,14 @@ const Recommendations: React.FC = () => {
   };
 
   const renderRadioGroup = (label: string, value: number, onChange: (v: number) => void, options: Array<{ value: number; label: string }>) => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const borderSelected = 'var(--accent)';
+    const borderDefault = 'var(--border)';
+    const bgSelected = 'var(--panel)';
+    const bgDefault = 'var(--panel)';
+    const colorSelected = 'var(--accent)';
+    const colorDefault = 'var(--ink)';
+
     return (
       <div className="form-row">
         <span style={{ fontWeight: 600, marginBottom: '12px', display: 'block', fontSize: '14px' }}>{label}</span>
@@ -114,22 +122,20 @@ const Recommendations: React.FC = () => {
                 cursor: 'pointer',
                 padding: '10px 14px',
                 borderRadius: '8px',
-                border: value === opt.value ? '2px solid #2e7d32' : '2px solid #dbe7d9',
-                background: value === opt.value ? '#e8f5e9' : '#f9fbf9',
+                border: `2px solid ${value === opt.value ? 'var(--accent)' : 'var(--border)'}`,
+                background: 'var(--panel)',
                 transition: 'all 0.2s ease',
                 fontWeight: value === opt.value ? 600 : 500,
-                color: value === opt.value ? '#2e7d32' : '#1f2d1f',
+                color: value === opt.value ? 'var(--accent)' : 'var(--ink)',
               }}
               onMouseEnter={(e) => {
                 if (value !== opt.value) {
-                  e.currentTarget.style.borderColor = '#94c794';
-                  e.currentTarget.style.background = '#f5faf5';
+                  e.currentTarget.style.borderColor = 'var(--accent-2)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (value !== opt.value) {
-                  e.currentTarget.style.borderColor = '#dbe7d9';
-                  e.currentTarget.style.background = '#f9fbf9';
+                  e.currentTarget.style.borderColor = 'var(--border)';
                 }
               }}
             >

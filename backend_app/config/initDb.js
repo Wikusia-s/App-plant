@@ -5,7 +5,7 @@ const createTables = async () => {
   // First connect to default postgres database
   const defaultPool = new Pool({
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
+    port: parseInt(process.env.DB_PORT, 10) || 5433,
     database: 'postgres',
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
@@ -114,7 +114,23 @@ const createTables = async () => {
         ON plant_documents USING ivfflat (embedding vector_cosine_ops) 
         WITH (lists = 100);
 
-        
+      -- Care tasks for user schedules
+      CREATE TABLE IF NOT EXISTS care_tasks (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        plant_id INTEGER REFERENCES plants(id) ON DELETE SET NULL,
+        type VARCHAR(20) NOT NULL,
+        title VARCHAR(255),
+        due_at TIMESTAMP NOT NULL,
+        notes TEXT,
+        status VARCHAR(20) NOT NULL DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_care_tasks_user_id ON care_tasks(user_id);
+      CREATE INDEX IF NOT EXISTS idx_care_tasks_due_at ON care_tasks(due_at);
+      CREATE INDEX IF NOT EXISTS idx_care_tasks_status ON care_tasks(status);
+
     `);
 
     // Analyze table for better query planning

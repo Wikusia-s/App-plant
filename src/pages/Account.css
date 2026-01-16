@@ -3,7 +3,12 @@
     min-height: 100vh;
     padding: 48px 24px;
     overflow: hidden;
-    background: #f7fbf7;
+    background: var(--bg);
+}
+
+/* Dark mode support for Account */
+[data-theme="dark"] .account-container {
+    background: var(--bg) !important;
 }
 
 /* Animated background with plant images */
@@ -48,12 +53,23 @@
     max-width: 520px;
     margin: 0 auto;
     padding: 24px;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--panel);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(17, 29, 17, 0.12);
+    box-shadow: var(--shadow);
     text-align: center;
-    border: 1px solid rgba(219, 231, 217, 0.8);
+    border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .account-content {
+    background: var(--panel) !important;
+    border: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .plant-square {
+    box-shadow: none !important;
+    opacity: 0.15 !important;
 }
 
 .account-header {
@@ -73,7 +89,7 @@
     place-items: center;
     font-size: 40px;
     font-weight: bold;
-    background: #eaf4ea;
+    background: var(--panel);
     color: var(--accent);
     border: 2px solid var(--accent);
     object-fit: cover;
@@ -112,17 +128,37 @@
 .account-field span {
     padding: 8px 12px;
     border-radius: 8px;
-    background: #f6fbf6;
+    background: var(--panel);
     border: 1px solid var(--border);
     color: var(--ink);
     font-size: 14px;
+}
+
+[data-theme="dark"] .account-field span {
+    background: var(--panel) !important;
+    border-color: var(--border) !important;
+    color: var(--ink) !important;
 }
 
 .account-field input {
     padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--ink);
     font-size: 14px;
+}
+
+.account-field input:focus {
+    outline: none;
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.12);
+}
+
+[data-theme="dark"] .account-field input {
+    background: var(--panel) !important;
+    color: var(--ink) !important;
+    border-color: var(--border) !important;
 }
 
 .edit-btn {
