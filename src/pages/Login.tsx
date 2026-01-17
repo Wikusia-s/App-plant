@@ -19,6 +19,10 @@ const Login: React.FC<LoginProps> = ({ onSuccess, onSwitchToRegister }) => {
   });
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
+  const [forgotEmail, setForgotEmail] = useState<string>('');
+  const [forgotLoading, setForgotLoading] = useState<boolean>(false);
+  const [forgotMessage, setForgotMessage] = useState<string>('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -40,6 +44,27 @@ const Login: React.FC<LoginProps> = ({ onSuccess, onSwitchToRegister }) => {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    setForgotMessage('');
+
+    try {
+      // TODO: Connect to actual backend endpoint for password reset
+      // await authService.resetPassword(forgotEmail);
+      setForgotMessage('A temporary password has been sent to your email. Please check your inbox.');
+      setForgotEmail('');
+      setTimeout(() => {
+        setShowForgotPassword(false);
+        setForgotMessage('');
+      }, 3000);
+    } catch (err) {
+      setForgotMessage(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setForgotLoading(false);
     }
   };
 
@@ -108,6 +133,16 @@ const Login: React.FC<LoginProps> = ({ onSuccess, onSwitchToRegister }) => {
           <button type="submit" className="auth-button" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <p className="auth-forgot">
+            <button
+              onClick={() => setShowForgotPassword(true)}
+              className="link-button"
+              type="button"
+            >
+              Forgot your password?
+            </button>
+          </p>
         </form>
 
         <p className="auth-switch">
@@ -117,6 +152,55 @@ const Login: React.FC<LoginProps> = ({ onSuccess, onSwitchToRegister }) => {
           </button>
         </p>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div className="modal-overlay" onClick={() => setShowForgotPassword(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3>Reset Password</h3>
+            <p className="modal-description">Enter your email address and we'll send you a temporary password.</p>
+
+            <form onSubmit={handleForgotPassword}>
+              <div className="form-group">
+                <label htmlFor="forgot-email">Email</label>
+                <input
+                  type="email"
+                  id="forgot-email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  required
+                  disabled={forgotLoading}
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              {forgotMessage && (
+                <div className={forgotMessage.includes('sent') ? 'success-message' : 'error-message'}>
+                  {forgotMessage}
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => setShowForgotPassword(false)}
+                  disabled={forgotLoading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="auth-button"
+                  disabled={forgotLoading}
+                >
+                  {forgotLoading ? 'Sending...' : 'Send Password'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

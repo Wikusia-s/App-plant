@@ -295,12 +295,12 @@ const HomePage: React.FC<HomePageProps> = ({ username }) => {
             <h3>Ask Questions</h3>
             <p>Get expert advice on plant care</p>
           </Link>
-          <Link to="/" className="action-card">
+          <Link to="/learn" className="action-card">
             <div className="action-icon">📚</div>
             <h3>Learn More</h3>
             <p>Access our plant database</p>
           </Link>
-          <Link to="/" className="action-card">
+          <Link to="/track" className="action-card">
             <div className="action-icon">🌱</div>
             <h3>Track Growth</h3>
             <p>Monitor your plants' progress</p>

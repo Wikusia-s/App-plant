@@ -49,6 +49,12 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, onSwitchToLogin }) => {
       return;
     }
 
+    if (formData.username.length > 10) {
+      setError('Username must be maximum 10 characters long');
+      setLoading(false);
+      return;
+    }
+
     try {
       await authService.register(formData.username, formData.email, formData.password);
       onSuccess();
@@ -103,6 +109,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, onSwitchToLogin }) => {
               onChange={handleChange}
               required
               minLength={3}
+              maxLength={10}
               disabled={loading}
             />
           </div>

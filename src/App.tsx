@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
@@ -8,6 +8,8 @@ import Recommendations from './pages/Recommendations';
 import Account from './pages/Account';
 import Chat from './pages/Chat';
 import Settings from './pages/Settings';
+import Learn from './pages/Learn';
+import Track from './pages/Track';
 import { authService } from './services/authService';
 import './styles.css';
 
@@ -19,11 +21,12 @@ interface User {
 
 function App() {
   const plantIcon = '🌿';
+  const location = useLocation();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const authenticated = authService.isAuthenticated();
@@ -33,6 +36,11 @@ function App() {
       setUser(currentUser);
     }
   }, []);
+
+  // Close sidebar when route changes
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
 
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
@@ -122,6 +130,8 @@ function App() {
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/account" element={<Account user={user} />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/track" element={<Track />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

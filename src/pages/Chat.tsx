@@ -39,7 +39,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{ show: boolean; convId: number | null }>({ show: false, convId: null });
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -225,6 +225,13 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
 
         {/* Chat Area */}
         <div className="chat-main">
+          <button
+            className="mobile-toggle-sidebar"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            ☰
+          </button>
           <div className="app__scroll">
             <div className="thread">
               {messages.length === 0 && currentConversationId && (

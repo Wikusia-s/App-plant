@@ -175,7 +175,7 @@ router.post('/message', authMiddleware, async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         message,
         k: 5,
         history: history || []
